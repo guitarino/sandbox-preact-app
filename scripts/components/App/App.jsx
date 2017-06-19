@@ -24,8 +24,8 @@ export default class App extends preact.Component {
         <button onClick={toggleName}>Change name!</button>
         <ColorToggle />
         <ColorDisplay />
-        <input type='text' value={state.input} onInput={inputChanged} />
-        <div><strong>What do you mean by { state.input }?</strong></div>
+        <input type='text' value={ state.input } onInput={ inputChanged } />
+        <div>What do you mean by <strong>{ state.input }</strong>?</div>
       </div>
     );
   }
