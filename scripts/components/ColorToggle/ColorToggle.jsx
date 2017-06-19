@@ -11,7 +11,7 @@ function toggleColor() {
 export default class ColorToggle extends preact.Component {
   render() {
     return (
-      <button onClick={toggleColor}>Change color!</button>
+      <button onClick={ toggleColor }>Change color!</button>
     );
   }
 };

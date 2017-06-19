@@ -6,7 +6,9 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: './scripts/index.js'
+    main: './scripts/index.js',
+    'my-benchmark': './scripts/benchmarks/my-way/App.js',
+    'redux-benchmark': './scripts/benchmarks/redux/App.js'
   },
   watch: DEBUG ? true : false,
   devtool: DEBUG ? 'source-map' : false,

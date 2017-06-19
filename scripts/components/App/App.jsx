@@ -17,11 +17,16 @@ function inputChanged(e) {
 }
 
 export default class App extends preact.Component {
+  constructor() {
+    super();
+    state.subscribe(() => this.forceUpdate());
+  }
+
   render() {
     return (
-      <div style={{color: state.color}}>
-        <div>Hello, {state.name}</div>
-        <button onClick={toggleName}>Change name!</button>
+      <div style={{ color: state.color }}>
+        <div>Hello, { state.name }</div>
+        <button onClick={ toggleName }>Change name!</button>
         <ColorToggle />
         <ColorDisplay />
         <input type='text' value={ state.input } onInput={ inputChanged } />
@@ -32,11 +37,8 @@ export default class App extends preact.Component {
 };
 
 export function renderTo(root) {
-  state.subscriber(function() {
-    preact.render(
-      <App />,
-      root,
-      root.firstChild
-    );
-  });
+  preact.render(
+    <App />,
+    root
+  );
 };

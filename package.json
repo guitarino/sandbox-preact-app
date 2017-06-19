@@ -30,6 +30,8 @@
     "babel-register": "^6.24.1",
     "es6-promise": "^4.1.0",
     "preact": "^8.1.0",
-    "preact-render-to-string": "^3.6.3"
+    "preact-redux": "^2.0.1",
+    "preact-render-to-string": "^3.6.3",
+    "redux": "^3.7.0"
   }
 }
