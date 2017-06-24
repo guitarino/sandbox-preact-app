@@ -5,7 +5,7 @@ let sub = 'Symbol' in global ?
 ;
 
 let State = function(iState) {
-  Object.defineProperty(this, sub, {value: []}); // should not show up in for(..in..) loop, or be removable
+  this[sub] = [];
   for(var key in iState) {
     if(iState.hasOwnProperty(key)) {
       this[key] = iState[key];
@@ -15,8 +15,11 @@ let State = function(iState) {
 
 // The reason for defineProperty is to make it non-configurable
 // So that rewrites will throw error
-Object.defineProperty(State.prototype, 'subscribe', {value: function(subscriber) {
+Object.defineProperty(State.prototype, 'subscribe', {value: function(subscriber, triggerUpdate) {
   this[sub].push(subscriber);
+  if(triggerUpdate) {
+    subscriber(this);
+  }
 }});
 
 Object.defineProperty(State.prototype, 'unsubscribe', {value: function(subscriber) {
@@ -25,7 +28,7 @@ Object.defineProperty(State.prototype, 'unsubscribe', {value: function(subscribe
     this[sub].splice(id, 1);
   }
   else {
-    console.warn("Not subscribed to this object's handleUpdate / function.. check if it's bound..");
+    console.warn('Not subscribed to this function.. is the function bound?');
   }
 }});
 
@@ -33,12 +36,7 @@ Object.defineProperty(State.prototype, 'change', {value: function(changeState) {
   changeState(this);
   for(let i=0; i<this[sub].length; i++) {
     let subscriber = this[sub][i];
-    if(typeof subscriber === 'function') {
-      subscriber(this);
-    }
-    else {
-      subscriber.handleUpdate(this);
-    }
+    subscriber(this);
   }
 }});
 

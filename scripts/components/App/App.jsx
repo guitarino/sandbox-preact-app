@@ -1,17 +1,15 @@
 import * as preact from 'preact';
-import state from '../../state';
-import ColorToggle from '../ColorToggle/ColorToggle';
-import ColorDisplay from '../ColorDisplay/ColorDisplay';
+import state, { createState } from '../../state';
 
 function toggleName() {
-  state.name !== 'World' ?
-    state.change((state) => { state.name = 'World' }) :
-    state.change((state) => { state.name = 'Hamster' })
+  state.App.name !== 'World' ?
+    state.App.change((state) => { state.name = 'World' }) :
+    state.App.change((state) => { state.name = 'Hamster' })
   ;
 }
 
 function inputChanged(e) {
-  state.change((state) => {
+  state.App.change((state) => {
     state.input = e.currentTarget.value
   });
 }
@@ -19,18 +17,31 @@ function inputChanged(e) {
 export default class App extends preact.Component {
   constructor() {
     super();
-    state.subscribe(() => this.forceUpdate());
+    state.App = createState({
+      name: 'World',
+      input: 'infinity'
+    });
+  }
+
+  componentWillMount() {
+    state.App.subscribe(this);
+  }
+
+  componentWillUnmount() {
+    state.App.unsubscribe(this);
+  }
+
+  handleUpdate() {
+    this.forceUpdate();
   }
 
   render() {
     return (
-      <div style={{ color: state.color }}>
-        <div>Hello, { state.name }</div>
+      <div>
+        <div>Hello, { state.App.name }</div>
         <button onClick={ toggleName }>Change name!</button>
-        <ColorToggle />
-        <ColorDisplay />
-        <input type='text' value={ state.input } onInput={ inputChanged } />
-        <div>What do you mean by <strong>{ state.input }</strong>?</div>
+        <input type='text' value={ state.App.input } onInput={ inputChanged } />
+        <div>What do you mean by <strong>{ state.App.input }</strong>?</div>
       </div>
     );
   }

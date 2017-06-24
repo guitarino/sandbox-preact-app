@@ -21,14 +21,19 @@ for(var i=0; i<len; i++) {
     let rand = Math.random();
     return class extends preact.Component {
       componentWillMount() {
-        state.randomNumbers[i].subscribe(this);
+        state.subscribe(this);
+        this.handleUpdate();
       }
       componentWillUnmount() {
-        state.randomNumbers[i].unsubscribe(this);
+        state.unsubscribe(this);
         console.log('unmounted');
       }
       handleUpdate() {
-        this.forceUpdate();
+        if(this.state.value !== state.randomNumbers[i]) {
+          this.setState({
+            value: state.randomNumbers[i]
+          });
+        }
       }
       componentDidUpdate() {
         if(testType === 3) {
@@ -38,10 +43,10 @@ for(var i=0; i<len; i++) {
       }
       render() {
         return (
-          <div style={{ color: 'red', lineHeight: state.randomNumbers[i].value }}>
+          <div style={{ color: 'red', lineHeight: this.state.value }}>
             <div>{ rand }</div>
             <span>{ this.props.property }</span>
-            <div>{ state.randomNumbers[i].value }</div>
+            <div>{ this.state.value }</div>
           </div>
         );
       };
@@ -56,14 +61,7 @@ function changeEverything() {
     let iState = generateNewState();
     for(let key in iState) {
       if(iState.hasOwnProperty(key)) {
-        if(key !== 'randomNumbers') {
-          state[key] = iState[key];
-        }
-        else {
-          for(let i=0; i<iState.randomNumbers.length; i++) {
-            state.randomNumbers[i].value = iState.randomNumbers[i].value;
-          }
-        }
+        state[key] = iState[key];
       }
     }
   });
@@ -72,8 +70,8 @@ function changeEverything() {
 function changeOne() {
   testType = 3;
   Test3Begin = (new Date()).getTime();
-  state.randomNumbers[0].change((state) => {
-    state.value = Math.random();
+  state.change((state) => {
+    state.randomNumbers[0] = Math.random();
   });
 };
 
@@ -82,12 +80,34 @@ let testType;
 class App extends preact.Component {
   componentWillMount() {
     state.subscribe(this);
+    this.handleUpdate();
   }
   componentWillUnmount() {
     state.unsubscribe(this);
   }
   handleUpdate() {
-    this.forceUpdate();
+    if(this.state.one !== state.one ||
+      this.state.two !== state.two ||
+      this.state.three !== state.three ||
+      this.state.four !== state.four ||
+      this.state.five !== state.five ||
+      this.state.six !== state.six ||
+      this.state.seven !== state.seven ||
+      this.state.eight !== state.eight ||
+      this.state.nine !== state.nine) {
+
+      this.setState({
+        one: state.one,
+        two: state.two,
+        three: state.three,
+        four: state.four,
+        five: state.five,
+        six: state.six,
+        seven: state.seven,
+        eight: state.eight,
+        nine: state.nine
+      });
+    }
   }
   componentDidMount() {
     Test1End = (new Date()).getTime();
@@ -108,18 +128,18 @@ class App extends preact.Component {
         </div>
         <div>{ emptyArray.map(() => (
           <Component1
-            one={ state.one }
-            two={ state.two }
+            one={ this.state.one }
+            two={ this.state.two }
             three={ <Component2
-              one={ state.three }
-              two={ state.four }
+              one={ this.state.three }
+              two={ this.state.four }
               three={ <Component1
-                one={ state.five }
-                two={ state.six }
+                one={ this.state.five }
+                two={ this.state.six }
                 three={ <Component2
-                  one={ state.seven }
-                  two={ state.eight }
-                  three={ state.nine }
+                  one={ this.state.seven }
+                  two={ this.state.eight }
+                  three={ this.state.nine }
                 /> }
               /> }
             /> }
@@ -128,14 +148,14 @@ class App extends preact.Component {
         <div>{ ArrayOfComponents.map((Component) => (
           <Component
             property={
-              state.one +
-              state.two +
-              state.three +
-              state.four +
-              state.five +
-              state.seven +
-              state.eight +
-              state.nine
+              this.state.one +
+              this.state.two +
+              this.state.three +
+              this.state.four +
+              this.state.five +
+              this.state.seven +
+              this.state.eight +
+              this.state.nine
             }
           />
         )) }</div>

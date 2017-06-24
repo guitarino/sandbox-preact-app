@@ -1,8 +1,6 @@
 import createState from '../../libs/state'
 
-export let len = 800;
-
-let state = createState(generateNewState());
+export let len = 50;
 
 export function generateNewState() {
   let iState = {
@@ -19,12 +17,10 @@ export function generateNewState() {
   };
 
   for(var i=0; i<len; i++) {
-    iState.randomNumbers.push(createState({ value: Math.random() }));
+    iState.randomNumbers.push(Math.random());
   }
 
   return iState;
 }
 
-global.state = state;
-
-export default state;
+export default createState(generateNewState());

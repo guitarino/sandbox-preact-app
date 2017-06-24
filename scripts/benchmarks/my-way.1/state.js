@@ -19,7 +19,7 @@ export function generateNewState() {
   };
 
   for(var i=0; i<len; i++) {
-    iState.randomNumbers.push(createState({ value: Math.random() }));
+    iState.randomNumbers.push(Math.random());
   }
 
   return iState;

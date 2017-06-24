@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 
-export let len = 800;
+export let len = 50;
 
 function generateNewState() {
   let iState = {
@@ -23,7 +23,7 @@ function generateNewState() {
   return iState;
 }
 
-let store = createStore((state = generateNewState(), action) => {
+export default createStore((state = generateNewState(), action) => {
   if(action.type === 'change_all') {
     return generateNewState();
   }
@@ -37,7 +37,3 @@ let store = createStore((state = generateNewState(), action) => {
   }
   return state;
 });
-
-Object.defineProperty(global, 'state', {get: function() { return store.getState() }});
-
-export default store;

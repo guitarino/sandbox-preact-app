@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     main: './scripts/index.js',
     'my-benchmark': './scripts/benchmarks/my-way/App.js',
+    'my-benchmark.1': './scripts/benchmarks/my-way.1/App.js',
     'redux-benchmark': './scripts/benchmarks/redux/App.js'
   },
   watch: DEBUG ? true : false,

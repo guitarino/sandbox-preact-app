@@ -20,28 +20,12 @@ for(var i=0; i<len; i++) {
   ArrayOfComponents.push(function(i) {
     let rand = Math.random();
     return class extends preact.Component {
-      componentWillMount() {
-        state.randomNumbers[i].subscribe(this);
-      }
-      componentWillUnmount() {
-        state.randomNumbers[i].unsubscribe(this);
-        console.log('unmounted');
-      }
-      handleUpdate() {
-        this.forceUpdate();
-      }
-      componentDidUpdate() {
-        if(testType === 3) {
-          Test3End = (new Date()).getTime();
-          console.log('Test 3 - change one', Test3End - Test3Begin);
-        }
-      }
       render() {
         return (
-          <div style={{ color: 'red', lineHeight: state.randomNumbers[i].value }}>
+          <div style={{ color: 'red', lineHeight: state.randomNumbers[i] }}>
             <div>{ rand }</div>
             <span>{ this.props.property }</span>
-            <div>{ state.randomNumbers[i].value }</div>
+            <div>{ state.randomNumbers[i] }</div>
           </div>
         );
       };
@@ -55,16 +39,7 @@ function changeEverything() {
   state.change((state) => {
     let iState = generateNewState();
     for(let key in iState) {
-      if(iState.hasOwnProperty(key)) {
-        if(key !== 'randomNumbers') {
-          state[key] = iState[key];
-        }
-        else {
-          for(let i=0; i<iState.randomNumbers.length; i++) {
-            state.randomNumbers[i].value = iState.randomNumbers[i].value;
-          }
-        }
-      }
+      state[key] = iState[key];
     }
   });
 };
@@ -72,33 +47,35 @@ function changeEverything() {
 function changeOne() {
   testType = 3;
   Test3Begin = (new Date()).getTime();
-  state.randomNumbers[0].change((state) => {
-    state.value = Math.random();
+  state.change((state) => {
+    state.randomNumbers[0] = Math.random();
   });
 };
 
 let testType;
 
 class App extends preact.Component {
-  componentWillMount() {
-    state.subscribe(this);
+  constructor() {
+    super();
+    state.subscribe(() => this.forceUpdate());
   }
-  componentWillUnmount() {
-    state.unsubscribe(this);
-  }
-  handleUpdate() {
-    this.forceUpdate();
-  }
+
   componentDidMount() {
     Test1End = (new Date()).getTime();
     console.log('Test 1 - generation and mounting', Test1End - Test1Begin);
   }
+
   componentDidUpdate() {
     if(testType === 2) {
       Test2End = (new Date()).getTime();
       console.log('Test 2 - change everything', Test2End - Test2Begin);
     }
+    else if(testType === 3) {
+      Test3End = (new Date()).getTime();
+      console.log('Test 3 - change one', Test3End - Test3Begin);
+    }
   }
+
   render() {
     return (
       <div>
