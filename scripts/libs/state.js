@@ -33,11 +33,11 @@ Object.defineProperty(State.prototype, 'change', {value: function(changeState) {
   changeState(this);
   for(let i=0; i<this[sub].length; i++) {
     let subscriber = this[sub][i];
-    if(typeof subscriber === 'function') {
-      subscriber(this);
+    if('handleUpdate' in subscriber) {
+      subscriber.handleUpdate(this);
     }
     else {
-      subscriber.handleUpdate(this);
+      subscriber(this);
     }
   }
 }});
