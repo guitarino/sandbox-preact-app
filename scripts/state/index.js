@@ -1,4 +1,4 @@
-import createState from '../libs/state.js';
+import createState from 'tiny-state';
 
 export { createState };
 

@@ -1,4 +1,4 @@
-import createState from '../../libs/state'
+import createState from 'tiny-state';
 
 export let len = 800;
 
