@@ -34,6 +34,6 @@
     "preact-render-to-string": "^3.6.3",
     "redux": "^3.7.0",
     "rval": "git+https://github.com/guitarino/rval.git",
-    "tiny-state": "git+https://github.com/guitarino/tiny-state.git"
+    "tiny-state": "^1.0.1"
   }
 }
